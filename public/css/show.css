@@ -1,0 +1,9 @@
+pre {
+	border-color: #839496;
+	padding: 0px;
+	margin-top: 2em;
+}
+
+.prettyprint ol.linenums > li {
+	list-style-type: decimal;
+}

@@ -1,0 +1,16 @@
+% layout 'default';
+<div class="row">
+	<div class="col-lg-12">
+		<div class="page-header">
+			<h1>Simple pastebin clone</h1>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<form action="<%= url_for('pastesave') %>" method="post">
+			<textarea name="paste" rows="28" class="form-control" placeholder="Your code here"></textarea><br>
+			<input type="submit" value="Save paste" class="btn">
+		</form>
+	</div>
+</div>

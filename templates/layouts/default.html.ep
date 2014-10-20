@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Paste @ fimbulvinter</title>
+	</head>
+	%= stylesheet '/css/base.css'
+	%= stylesheet '/css/bootstrap.min.css'
+	%= content_for 'css'
+	<body>
+		<div class="container">
+			%= content
+		</div>
+		%= content_for 'js'
+	</body>
+</html>
