@@ -10,6 +10,7 @@
 	<div class="col-lg-12">
 		<form action="<%= url_for('pastesave') %>" method="post">
 			<textarea name="paste" rows="28" class="form-control" placeholder="Your code here"></textarea><br>
+			%= csrf_field
 			<input type="submit" value="Save paste" class="btn">
 		</form>
 	</div>
