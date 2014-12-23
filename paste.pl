@@ -11,6 +11,11 @@ app->secrets(app->config('secrets'));
 
 helper pg => sub { state $pg = Mojo::Pg->new(app->config('dsn')) };
 
+helper generate_token => sub {
+	my $id = shift;
+	return cnv($id + int rand(9999999), 'dec', 'b62');
+};
+
 app->pg->db->do(
 	'create table if not exists paste(
 		id serial,
@@ -19,11 +24,6 @@ app->pg->db->do(
 		primary key(id)
 	)'
 );
-
-helper generate_token => sub {
-	my $id = shift;
-	return cnv($id + int rand(9999999), 'dec', 'b62');
-};
 
 get '/' => sub ($c) {
 	$c->render('index');

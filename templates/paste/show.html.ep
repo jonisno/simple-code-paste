@@ -2,13 +2,10 @@
 
 % content_for 'css' => begin
 %= stylesheet '/css/show.css'
-<!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/solarized_dark.min.css">-->
 % end
 
 % content_for 'js' => begin
-<!--<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>-->
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
+<script src="/js/prettify/run_prettify.js?skin=desert"></script>
 % end
 
 <div class="row">
