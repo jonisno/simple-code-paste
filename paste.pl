@@ -16,14 +16,7 @@ helper generate_token => sub {
 	return cnv($id + int rand(9999999), 'dec', 'b62');
 };
 
-app->pg->db->do(
-	'create table if not exists paste(
-		id serial,
-		token text unique,
-		content text,
-		primary key(id)
-	)'
-);
+app->pg->migrations->from_data->migrate;
 
 get '/' => sub ($c) {
 	$c->render('index');
@@ -36,12 +29,13 @@ get '/p' => sub ($c) {
 post '/p/save' => sub ($c) {
 	my $db = $c->pg->db;
 	my $paste = $c->param('paste');
+	my $title = $c->param('title');
 
 	# CSRF protection.
 	my $val = $c->validation;
 	return $c->render(text => 'Invalid CSRF token', status => 403) if $val->csrf_protect->has_error('csrf_token');
 
-	my $res = $db->query('insert into paste(content) values (?) returning id' => $paste);
+	my $res = $db->query('insert into paste(title,content) values (?,?) returning id' => ($title, $paste));
 	my $id = $res->hash->{id};
 
 	# Generate token and make sure it's not already in the database.
@@ -59,10 +53,34 @@ post '/p/save' => sub ($c) {
 get '/p/:token' => sub ($c) {
 	my $db = $c->pg->db;
 	my $token = $c->param('token');
-	my $res = $db->query('select content from paste where token = (?)' => $token)->hash;
+	my $res = $db->query('select * from paste where token = (?)' => $token)->hash;
 	return $c->reply->not_found unless $res;
+	$c->stash(title => $res->{title});
 	$c->stash(content => $res->{content});
 	$c->render('paste/show');
 } => 'pasteshow';
 
 app->start;
+
+__DATA__
+@@ migrations
+
+-- 1 up
+create table if not exists paste(
+	id serial,
+	token text unique,
+	content text,
+	primary key(id)
+);
+-- 1 down
+drop table paste;
+
+-- 2 up
+alter table paste add column title text;
+-- 2 down
+alter table paste drop column title;
+
+-- 3 up
+create unique index title_idx on paste (token);
+-- 3 down
+drop index title_idx;
