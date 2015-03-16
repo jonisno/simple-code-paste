@@ -18,15 +18,15 @@ helper generate_token => sub {
 
 app->pg->migrations->from_data->migrate;
 
+hook before_dispatch => sub {
+  shift->req->url->base->path('/p/');
+} if app->mode eq 'production';
+
 get '/' => sub ($c) {
-	$c->render('index');
-} => 'index';
-
-get '/p' => sub ($c) {
 	$c->render('paste');
-} => 'paste';
+} => 'create_paste';
 
-post '/p/save' => sub ($c) {
+post '/save' => sub ($c) {
 	my $db = $c->pg->db;
 	my $paste = $c->param('paste');
 	my $title = $c->param('title');
@@ -47,10 +47,10 @@ post '/p/save' => sub ($c) {
 	};
 
 	$db->query('update paste set token = ? where id = ?' => ($token, $id));
-	$c->redirect_to("/p/$token");
-} => 'pastesave';
+	$c->redirect_to("/$token");
+} => 'save_paste';
 
-get '/p/:token' => sub ($c) {
+get '/:token' => sub ($c) {
 	my $db = $c->pg->db;
 	my $token = $c->param('token');
 	my $res = $db->query('select * from paste where token = (?)' => $token)->hash;
@@ -58,7 +58,7 @@ get '/p/:token' => sub ($c) {
 	$c->stash(title => $res->{title});
 	$c->stash(content => $res->{content});
 	$c->render('paste/show');
-} => 'pasteshow';
+} => 'show_paste';
 
 app->start;
 

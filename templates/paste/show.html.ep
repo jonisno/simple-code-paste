@@ -5,12 +5,12 @@
 % end
 
 % content_for 'js' => begin
-<script src="/js/prettify/run_prettify.js?skin=desert"></script>
+%= javascript '/js/prettify/run_prettify.js?skin=desert'
 % end
 
 <div class="row">
 	<div class="col-xs-12">
-		<h1><%= $title // '' %><a href="/p" class="btn btn-default pull-right">Create new paste</a></h1>
+    <h1><%= $title // '' %><a href="<%= url_for 'create_paste' %>" class="btn btn-default pull-right">Create new paste</a></h1>
 		<pre class="prettyprint linenums"><code><%= stash('content') %></code></pre>
 	</div>
 </div>
