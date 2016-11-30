@@ -84,3 +84,8 @@ alter table paste drop column title;
 create unique index title_idx on paste (token);
 -- 3 down
 drop index title_idx;
+
+-- 4 up
+alter table paste add column expire_at datetime with time zone;
+-- 4 down
+alter table paste drop column expire_at;
