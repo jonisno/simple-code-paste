@@ -14,6 +14,13 @@
 			<h3>Content:</h3>
 			<textarea name="paste" rows="28" class="form-control" placeholder="Your code here"></textarea><br>
 			%= csrf_field
+			<select>
+				<option value="never">Never</option>
+				<option value="minutes">10 minutes</option>
+				<option value="hour">1 hour</option>
+				<option value="day">10 day</option>
+				<option value="month">10 month</option>
+			</select>
 			<input type="submit" value="Save paste" class="btn btn-default">
 		</form>
 	</div>
